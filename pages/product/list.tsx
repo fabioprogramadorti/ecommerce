@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
 
 const productList = [
   {
+    id: 1,
     name: 'IPhone',
     description: 'Smarth Phone of Apple',
     price: 300.21,
@@ -13,6 +15,7 @@ const productList = [
     ]
   },
   {
+    id: 2,
     name: 'MacBook',
     description: 'Laptop of Apple',
     price: 1200.21,
@@ -36,16 +39,20 @@ export default function ProductList() {
 
       <div className={styles.grid}>
           {
-            products.map(product => (
-              <div className={styles.card}>
-                <h3>{product.name}</h3>
-                <p>Description: {product.description}</p>
-                <p>Price: {product.price}</p>
-                <p>Published At: {product.published_at}</p>
-                {product.images.map(image => (
-                  <img src={image} width="120px" height="100px"/>
-                ))}
-              </div>
+          products.map(product => (
+            <Link href={{
+              pathname: "/product/" + product.id,
+            }}>
+                <a className={styles.card}>
+                  <h3>{product.name}</h3>
+                  <p>Description: {product.description}</p>
+                  <p>Price: {product.price}</p>
+                  <p>Published At: {product.published_at}</p>
+                  {product.images.map(image => (
+                    <img src={image} width="120px" height="100px"/>
+                    ))}
+              </a>
+              </Link>
             ))
           }
       </div>
