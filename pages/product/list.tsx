@@ -3,7 +3,7 @@ import Link from "next/link"
 import styles from "../../styles/Home.module.css"
 import { getProductsData } from '../../lib/products'
 
-export default function ProductList({ allProducts}) {
+export default function ProductList({ allProducts }) {
 
   const [products, setProducts] = useState(allProducts)
 
@@ -16,7 +16,7 @@ export default function ProductList({ allProducts}) {
       <div className={styles.grid}>
           {
           products.map(product => (
-            <Link href={{
+            <Link key={product.id} href={{
               pathname: "/product/" + product.id,
             }}>
                 <a className={styles.card}>

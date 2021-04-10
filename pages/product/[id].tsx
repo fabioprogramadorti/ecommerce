@@ -1,22 +1,12 @@
 import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import { useState } from 'react'
+import { getProductsDetail } from '../../lib/products'
+import { useRouter } from 'next/router'
 // As a user, I want to create a product with at least these fields: name, description, price and published_at
 // As a user, I want to upload one or more images to the product.
-const product = {
-  id: 1,
-  name: 'MacBook',
-  description: 'Laptop of Apple',
-  price: 1200.21,
-  published_at: '2020-11-11',
-  images: [
-    'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.a3cTF2kZNwANt9pgP_19WgHaF3%26pid%3DApi&f=1',
-    'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.gTOu29SWTKbsxU0qhzzhpgHaEK%26pid%3DApi&f=1'
-  ]
-}
 
-
-export default function ProductDetail() {
+export default function ProductDetail({ product }) {
 
   const [name, setName] = useState(product.name)
   const [description, setDescription] = useState(product.description)
@@ -102,4 +92,17 @@ export default function ProductDetail() {
       <button type="submit">Cancel</button>
     </div>
   )
+}
+
+export async function getServerSideProps({ params }) {
+  // Get external data from the file system, API, DB, etc.
+  const product =  await getProductsDetail(params.id)
+
+  // The value of the `props` key will be
+  //  passed to the `Home` component
+  return {
+    props: {
+      product
+    }
+  }
 }
