@@ -1,35 +1,11 @@
-import { useState } from 'react'
-import Link from 'next/link'
-import styles from '../../styles/Home.module.css'
+import { useState } from "react"
+import Link from "next/link"
+import styles from "../../styles/Home.module.css"
+import { getProductsData } from '../../lib/products'
 
-const productList = [
-  {
-    id: 1,
-    name: 'IPhone',
-    description: 'Smarth Phone of Apple',
-    price: 300.21,
-    published_at: '11-11-2020',
-    images: [
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQG3vHiKJOCNSbjXNuK-lN1H0ZvLy2ag40Jx7tceflpE9WOLZwkjkouMhIzooImpdmqXdVBMZFy&usqp=CAc',
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.gkBl7j0_GL3uZ9nODBTeDAHaKX%26pid%3DApi&f=1'
-    ]
-  },
-  {
-    id: 2,
-    name: 'MacBook',
-    description: 'Laptop of Apple',
-    price: 1200.21,
-    published_at: '11-11-2020',
-    images: [
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.a3cTF2kZNwANt9pgP_19WgHaF3%26pid%3DApi&f=1',
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.gTOu29SWTKbsxU0qhzzhpgHaEK%26pid%3DApi&f=1'
-    ]
-  }
-]
+export default function ProductList({ allProducts}) {
 
-export default function ProductList() {
-  
-  const [products, setProducts] = useState(productList)
+  const [products, setProducts] = useState(allProducts)
 
   return (
     <main className={styles.main}>
@@ -58,4 +34,15 @@ export default function ProductList() {
       </div>
       </main>
   )
+}
+
+export async function getServerSideProps({ params }) {
+  // Fetch necessary data for the repos using params.lang
+  const allProducts = await getProductsData()
+
+  return {
+    props: {
+      allProducts
+    }
+  }
 }

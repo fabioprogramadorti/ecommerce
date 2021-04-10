@@ -17,13 +17,12 @@ const product = {
 
 
 export default function ProductDetail() {
+
   const [name, setName] = useState(product.name)
   const [description, setDescription] = useState(product.description)
   const [price, setPrice] = useState(product.price)
   const [published_at, setPublished_at] = useState(product.published_at)
   const [images, setImages] = useState(product.images)
-
-  
 
   return (
     <div className={styles.container}>
