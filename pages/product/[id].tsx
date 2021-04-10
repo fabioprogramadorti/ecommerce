@@ -3,21 +3,27 @@ import styles from '../../styles/Home.module.css'
 import { useState } from 'react'
 // As a user, I want to create a product with at least these fields: name, description, price and published_at
 // As a user, I want to upload one or more images to the product.
+const product = {
+  id: 1,
+  name: 'MacBook',
+  description: 'Laptop of Apple',
+  price: 1200.21,
+  published_at: '2020-11-11',
+  images: [
+    'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.a3cTF2kZNwANt9pgP_19WgHaF3%26pid%3DApi&f=1',
+    'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.gTOu29SWTKbsxU0qhzzhpgHaEK%26pid%3DApi&f=1'
+  ]
+}
+
 
 export default function ProductDetail() {
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [price, setPrice] = useState(0.0)
-  const [published_at, setPublished_at] = useState("")
-  const [images, setImages] = useState([])
+  const [name, setName] = useState(product.name)
+  const [description, setDescription] = useState(product.description)
+  const [price, setPrice] = useState(product.price)
+  const [published_at, setPublished_at] = useState(product.published_at)
+  const [images, setImages] = useState(product.images)
 
-  const product = {
-    name,
-    description,
-    price,
-    published_at,
-    images
-  }
+  
 
   return (
     <div className={styles.container}>
@@ -39,6 +45,7 @@ export default function ProductDetail() {
             <input
               type="text"
               placeholder="Name"
+              value={name}
               onChange={async (e) => {
                 const { value } = e.currentTarget
                 setName(value)
@@ -52,6 +59,7 @@ export default function ProductDetail() {
             </h3>
             <textarea
               placeholder="description"
+              value={description}
               onChange={async (e) => {
                 const { value } = e.currentTarget
                 setDescription(value)
@@ -66,6 +74,7 @@ export default function ProductDetail() {
             <input
               type="number"
               placeholder="Price"
+              value={price}
               onChange={async (e) => {
                 const { value } = e.currentTarget
                 setPrice(parseFloat(value))
@@ -79,6 +88,7 @@ export default function ProductDetail() {
             <input
               type="date"
               placeholder="Published At"
+              value={published_at}
               onChange={async (e) => {
                 const { value } = e.currentTarget
                 setPublished_at(value)
