@@ -2,7 +2,7 @@ import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import { useState } from 'react'
 import { getProductsDetail } from '../../lib/products'
-
+import { Form, Button, Row, Col, InputGroup } from 'react-bootstrap'
 
 export default function ProductDetail({ product }) {
 
@@ -13,75 +13,83 @@ export default function ProductDetail({ product }) {
   const [images, setImages] = useState(product.images)
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Product Detail</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
+      <div className='container'>
+        <h1 className='text-center'>
           Product Detail
         </h1>
+        <Form>
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Name"
+                value={name}
+                onChange={async (e) => {
+                  const { value } = e.currentTarget
+                  setName(value)
+                }}/>
+            </Form.Group>
 
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <h3>
-              Name
-            </h3>
-            <input
-              type="text"
-              placeholder="Name"
-              value={name}
-              onChange={async (e) => {
-                const { value } = e.currentTarget
-                setName(value)
-              }}
-            />
-          </div>
+            <Form.Group as={Col} controlId="formGridPrice">
+              <Form.Label>Price</Form.Label>
+              <InputGroup hasValidation>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroupPrepend">$</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="number"
+                  placeholder="Price"
+                  min='0'
+                  value={price}
+                  onChange={async (e) => {
+                    const { value } = e.currentTarget
+                    setPrice(parseFloat(value))
+                  }}/>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGridCity">
+              <Form.Label>Published At</Form.Label>
+              <Form.Control
+                type='date'
+                value={published_at}
+                onChange={async (e) => {
+                  const { value } = e.currentTarget
+                  setPublished_at(value)
+                }}
+              />
+            </Form.Group>
+          </Form.Row>
 
-          <div className={styles.card}>
-            <h3>
-              Description
-            </h3>
-            <textarea
-              placeholder="description"
-              value={description}
+
+          <Form.Group controlId="formGridDescription1">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={description} 
               onChange={async (e) => {
                 const { value } = e.currentTarget
                 setDescription(value)
               }}
             />
-          </div>
+          </Form.Group>
 
-          <div className={styles.card}>
-            <h3>
-              Price
-            </h3>
-            <input
-              type="number"
-              placeholder="Price"
-              value={price}
-              onChange={async (e) => {
-                const { value } = e.currentTarget
-                setPrice(parseFloat(value))
-              }}
-            />
-          </div>
-          <div className={styles.card}>
-            <h3>
-              Published At
-            </h3>
-            <input
-              type="date"
-              placeholder="Published At"
-              value={published_at}
-              onChange={async (e) => {
-                const { value } = e.currentTarget
-                setPublished_at(value)
-              }}
-            />
-          </div>
+          <Button variant="success" type="submit">
+            Save
+          </Button>
+          <Button variant="danger" type="submit" className="mx-2" >
+            Cancel
+          </Button>
+        </Form>
+        <div className={styles.grid}>
+
           <div className={styles.card}>
             <h3>
               Photos
@@ -92,10 +100,7 @@ export default function ProductDetail({ product }) {
           </div>
 
         </div>
-      </main>
-
-      <button type="submit">Save</button>
-      <button type="submit">Cancel</button>
+      </div>
     </div>
   )
 }
