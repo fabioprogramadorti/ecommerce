@@ -23,7 +23,7 @@ export default function NewProduct() {
         <h1 className='text-center'>
           Product Detail
         </h1>
-        <ProductForm product={newProduct} />
+        <ProductForm product={newProduct} new/>
       </div>
     </div>
   )

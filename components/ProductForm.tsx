@@ -1,5 +1,26 @@
 import { Form, Button, Col, InputGroup, Container, Row, Image } from 'react-bootstrap'
 import { useState } from 'react'
+import Link from 'next/link'
+
+function createProduct(product) {
+  fetch('http://localhost/product/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(product)
+  })
+}
+
+function updateProduct(product) {
+  fetch('http://localhost/product/', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(product)
+  })
+}
 
 export default function ProductForm(props) {
 
@@ -8,7 +29,9 @@ export default function ProductForm(props) {
   const [price, setPrice] = useState(props.product.price)
   const [published_at, setPublished_at] = useState(props.product.published_at)
   const [images, setImages] = useState(props.product.images)
-
+  const product = {
+    name, description, price, published_at, images
+  }
   return (
     <Container>
       <Form>
@@ -26,64 +49,69 @@ export default function ProductForm(props) {
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridPrice">
-            <Form.Label>Price</Form.Label>
-            <InputGroup hasValidation>
-              <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroupPrepend">$</InputGroup.Text>
-              </InputGroup.Prepend>
-              <Form.Control
-                type="number"
-                placeholder="Price"
-                min='0'
-                value={price}
-                onChange={async (e) => {
-                  const { value } = e.currentTarget
-                  setPrice(parseFloat(value))
-                }} />
-            </InputGroup>
-          </Form.Group>
+              <Form.Label>Price</Form.Label>
+              <InputGroup hasValidation>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroupPrepend">$</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="number"
+                  placeholder="Price"
+                  min='0'
+                  value={price}
+                  onChange={async (e) => {
+                    const { value } = e.currentTarget
+                    setPrice(parseFloat(value))
+                  }} />
+              </InputGroup>
+            </Form.Group>
           <Form.Group as={Col} controlId="formGridCity">
-          <Form.Label>Published At</Form.Label>
-          <Form.Control
-            type='date'
-            value={published_at}
-            onChange={async (e) => {
-              const { value } = e.currentTarget
-              setPublished_at(value)
-            }}
-          />
-        </Form.Group>
+            <Form.Label>Published At</Form.Label>
+            <Form.Control
+              type='date'
+              value={published_at}
+              onChange={async (e) => {
+                const { value } = e.currentTarget
+                setPublished_at(value)
+              }}
+            />
+          </Form.Group>
         </Form.Row>
 
         <Form.Group controlId="formGridDescription1">
           <Form.Label>Description</Form.Label>
           <Form.Control
-            as="textarea"
-            rows={3}
-            value={description}
-            onChange={async (e) => {
-              const { value } = e.currentTarget
-              setDescription(value)
-            }}
+              as="textarea"
+              rows={3}
+              value={description}
+              onChange={async (e) => {
+                const { value } = e.currentTarget
+                setDescription(value)
+              }}
           />
 
-    
           <Form.Group className="my-2">
             <Form.File id="FormControlFile1" label="Escolha uma Foto" custom multiple />
           </Form.Group>
+
+        </Form.Group>
+
+        <Button variant="success" type="submit" className="my-2"
+          onClick={_ => {
+            props.new ?
+              createProduct(product)
+            : updateProduct(product)
+          }}>
+          Save
+        </Button>
         
-      </Form.Group>
-
-      
-
-      
-
-      <Button variant="success" type="submit" className="my-2">
-        Save
-      </Button>
-      <Button variant="danger" type="submit" className="mx-2" >
-        Cancel
-      </Button>
+        <Link href='/'>
+          <a >
+            <Button variant="danger" type="submit" className="mx-2" >
+              Cancel
+            </Button>
+          </a>
+        </Link>
       
       </Form>
       
