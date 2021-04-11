@@ -1,8 +1,7 @@
 import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import { useState } from 'react'
-// As a user, I want to create a product with at least these fields: name, description, price and published_at
-// As a user, I want to upload one or more images to the product.
+
 
 export default function NewProduct() {
   const [name, setName] = useState("")

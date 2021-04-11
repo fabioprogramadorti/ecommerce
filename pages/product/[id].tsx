@@ -2,9 +2,7 @@ import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import { useState } from 'react'
 import { getProductsDetail } from '../../lib/products'
-import { useRouter } from 'next/router'
-// As a user, I want to create a product with at least these fields: name, description, price and published_at
-// As a user, I want to upload one or more images to the product.
+
 
 export default function ProductDetail({ product }) {
 
@@ -83,6 +81,14 @@ export default function ProductDetail({ product }) {
                 setPublished_at(value)
               }}
             />
+          </div>
+          <div className={styles.card}>
+            <h3>
+              Photos
+            </h3>
+           { images.map(image => (
+            <img src={image} alt="" width="150px"/>
+            ))}
           </div>
 
         </div>
