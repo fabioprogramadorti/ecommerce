@@ -17,7 +17,7 @@ class ProcessOrdersUseCase:
                 try:
                     self.logger.info(f"Enviando pedido {order.id_pedido}")
 
-                    self.api.send(order)
+                    self.api.send_order(order)
 
                     success_orders.append(order)
 
@@ -28,14 +28,12 @@ class ProcessOrdersUseCase:
                         f"Erro ao enviar pedido {order.id_pedido}: {str(e)}"
                     )
 
-            # salva SOMENTE os que deram certo na API
             if success_orders:
                 self.repo.save_all(success_orders)
                 self.logger.info(f"{len(success_orders)} pedidos salvos no banco")
             else:
                 self.logger.warning("Nenhum pedido foi enviado com sucesso")
 
-            # log de resumo final
             self.logger.info(
                 f"Processamento finalizado | Sucesso: {len(success_orders)} | Falhas: {len(failed_orders)}"
             )

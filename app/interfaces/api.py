@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Query, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException
 import shutil
 import os
 
@@ -31,37 +31,35 @@ def root():
     description="Faz upload de um arquivo CSV, processa pedidos e envia para API externa",
 )
 async def import_orders(
-    file: UploadFile = File(..., description="Arquivo CSV com pedidos"),
-    limit: int = Query(
-        100,
-        description="Número máximo de registros a serem processados",
-        ge=1,
-        le=100000
-    )
+    file: UploadFile = File(..., description="Arquivo CSV com pedidos")
 ):
     logger = get_logger()
 
     try:
+        
         os.makedirs("data", exist_ok=True)
 
         filename = os.path.basename(file.filename)
         file_path = os.path.join("data", filename)
 
+        
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
+        
         reader = CsvReader()
         repo = PostgresRepository()
         api = RestClient()
 
-        orders = reader.read(file_path, limit=limit)
+        
+        orders = reader.read(file_path)
 
+        
         ProcessOrdersUseCase(repo, api, logger).execute(orders)
 
         return {
             "message": "Pedidos processados com sucesso",
-            "processed": len(orders),
-            "limit": limit
+            "processed": len(orders)
         }
 
     except Exception as e:
@@ -79,6 +77,7 @@ async def import_orders(
     description="Gera um relatório CSV com total de pedidos e valores por status"
 )
 def generate_report():
+
     logger = get_logger()
 
     try:
@@ -86,13 +85,13 @@ def generate_report():
 
         repo = PostgresRepository()
 
-        # 🔥 agora captura os dados
+        
         data = GenerateReportUseCase(repo).execute()
 
         return {
             "message": "Relatório gerado com sucesso",
             "file": "reports/report.csv",
-            "data": data  # 🔥 mostra no endpoint
+            "data": data
         }
 
     except Exception as e:

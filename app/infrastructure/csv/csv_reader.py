@@ -17,21 +17,36 @@ class CsvReader:
             reader = csv.DictReader(csvfile)
 
             for i, row in enumerate(reader):
-                if limit and i >= limit:
+
+                if limit is not None and i >= limit:
                     break
 
-                status_raw = (row.get("status") or row.get("status_pagamento")).strip().upper()
+                if not any(row.values()):
+                    continue
+
+                if not row.get("id_pedido") or not row.get("cliente"):
+                    continue
+
+                status_raw = (
+                    row.get("status")
+                    or row.get("status_pagamento")
+                    or ""
+                ).strip().upper()
+
                 status = STATUS_MAP.get(status_raw)
 
                 if not status:
                     continue
 
-                order = OrderDTO(
-                    id_pedido=row["id_pedido"],
-                    cliente=row["cliente"],
-                    valor=row["valor"],
-                    status=status
-                )
+                try:
+                    order = OrderDTO(
+                        id_pedido=int(row["id_pedido"]),
+                        cliente=row["cliente"].strip(),
+                        valor=float(row["valor"]),
+                        status=status
+                    )
+                except (ValueError, TypeError):
+                    continue
 
                 orders.append(order)
 
