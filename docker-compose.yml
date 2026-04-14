@@ -19,6 +19,24 @@ services:
       timeout: 5s
       retries: 5
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: orders_rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"    # comunicação da aplicação
+      - "15672:15672"  # painel web (admin)
+
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
   app:
     build: .
     container_name: orders_app
@@ -29,6 +47,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started
     volumes:
       - .:/app
 
