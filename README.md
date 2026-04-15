@@ -36,7 +36,7 @@ CSV → ETL → API → PostgreSQL
 ---
 
 # Estrutura do projeto
-
+```text
 app/
 ├── application/
 │   └── use_cases/
