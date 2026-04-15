@@ -1,0 +1,5 @@
+id_pedido,cliente,valor,status
+1,Ana,100,pending
+2,Bia,200,approved
+3,Carlos,300,canceled
+4,Daniel,150,pending

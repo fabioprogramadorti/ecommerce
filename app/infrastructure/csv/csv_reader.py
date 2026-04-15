@@ -2,9 +2,15 @@ import csv
 from app.domain.dtos.order_dto import OrderDTO
 
 STATUS_MAP = {
+    "PENDING": "PENDENTE",
     "PENDENTE": "PENDENTE",
+
+    "APPROVED": "APROVADO",
     "APROVADO": "APROVADO",
+
+    "CANCELED": "CANCELADO",
     "CANCELADO": "CANCELADO",
+
     "ESTORNADO": "CANCELADO",
 }
 

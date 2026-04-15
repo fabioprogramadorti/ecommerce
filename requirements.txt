@@ -6,3 +6,4 @@ requests
 python-dotenv
 tenacity
 python-multipart
+pytest
