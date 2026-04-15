@@ -88,11 +88,8 @@ http://localhost:8000/docs
 
 ## 3. Banco de dados
 
-Host: localhost  
-Port: 5432  
-Database: orders  
-User: postgres  
-Password: postgres  
+O PostgreSQL é executado em container Docker, garantindo ambiente isolado e replicável. N
+Não é necessária instalação local do banco.
 
 ---
 
