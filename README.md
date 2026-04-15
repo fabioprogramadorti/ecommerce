@@ -54,7 +54,7 @@ app/
 tests/
 docker-compose.yml
 Dockerfile
-
+```
 ---
 
 # Pré-requisitos
