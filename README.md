@@ -57,14 +57,14 @@ Dockerfile
 ```
 ---
 
-Pré-requisitos
+# Pré-requisitos
 
 O único requisito para execução do projeto é:
 
 Docker
 Docker Compose
 
-Observação importante
+# Observação importante
 
 Toda a infraestrutura da aplicação (API, banco de dados e testes automatizados) é executada via Docker.
 
