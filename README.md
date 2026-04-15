@@ -68,15 +68,16 @@ Docker Compose
 
 Toda a infraestrutura da aplicação (API, banco de dados e testes automatizados) é executada via Docker.
 
-Não é necessário instalar:
+## Não é necessário instalar:
 
 Python localmente
 PostgreSQL localmente
 Dependências manualmente
 Ambiente virtual (venv)
-Motivo da escolha
 
-O projeto foi desenhado para garantir:
+## Motivo da escolha
+
+### O projeto foi desenhado para garantir:
 
 Ambiente 100% replicável
 Facilidade de execução
