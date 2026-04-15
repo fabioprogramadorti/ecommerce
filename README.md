@@ -88,7 +88,7 @@ http://localhost:8000/docs
 
 ## 3. Banco de dados
 
-O PostgreSQL é executado em container Docker, garantindo ambiente isolado e replicável. N
+O PostgreSQL é executado em container Docker, garantindo ambiente isolado e replicável.
 Não é necessária instalação local do banco.
 
 ---
