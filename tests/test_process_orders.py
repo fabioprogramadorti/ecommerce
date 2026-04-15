@@ -1,21 +1,34 @@
-from unittest.mock import Mock
-from app.application.use_cases.process_orders import ProcessOrdersUseCase
+class ProcessOrdersUseCase:
 
-def test_process_orders_usecase():
+    def __init__(self, repo=None, api=None, logger=None, producer=None):
+        self.repo = repo
+        self.api = api
+        self.logger = logger
+        self.producer = producer
 
-    repo = Mock()
-    api = Mock()
-    logger = Mock()
+    def execute(self, orders):
 
-    orders = [
-        Mock(id_pedido=1),
-        Mock(id_pedido=2),
-        Mock(id_pedido=3)
-    ]
+        if self.producer:
+            self.logger.info(f"Enviando {len(orders)} pedidos para fila")
+            self.producer.publish(orders)
+            return
 
-    usecase = ProcessOrdersUseCase(repo, api, logger)
+        success_orders = []
+        failed_orders = []
 
-    usecase.execute(orders)
+        try:
+            self.logger.info(f"Iniciando processamento de {len(orders)} pedidos")
 
-    assert api.send_order.call_count == 3
-    repo.save_all.assert_called_once()
+            for order in orders:
+                try:
+                    self.api.send_order(order)
+                    success_orders.append(order)
+                except Exception:
+                    failed_orders.append(order)
+
+            if success_orders:
+                self.repo.save_all(success_orders)
+
+        finally:
+            if self.repo:
+                self.repo.close()

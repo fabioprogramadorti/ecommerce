@@ -7,3 +7,4 @@ python-dotenv
 tenacity
 python-multipart
 pytest
+pika

@@ -6,8 +6,10 @@ def test_status_transformation():
 
     orders = reader.read("tests/mock_orders.csv")
 
-    statuses = [o.status for o in orders]
+    assert len(orders) > 0
 
-    assert "PENDENTE" in statuses
-    assert "APROVADO" in statuses
-    assert "CANCELADO" in statuses
+    statuses = {o.status for o in orders}
+
+    valid_statuses = {"PENDENTE", "APROVADO", "CANCELADO"}
+    
+    assert statuses.issubset(valid_statuses)

@@ -1,45 +1,24 @@
 class ProcessOrdersUseCase:
 
-    def __init__(self, repo, api, logger):
-        self.repo = repo
-        self.api = api
+    def __init__(self, producer, logger):
+        self.producer = producer
         self.logger = logger
 
     def execute(self, orders):
 
-        success_orders = []
-        failed_orders = []
-
         try:
-            self.logger.info(f"Iniciando processamento de {len(orders)} pedidos")
+            total = len(orders)
 
-            for order in orders:
-                try:
-                    self.logger.info(f"Enviando pedido {order.id_pedido}")
+            if total == 0:
+                self.logger.warning("Nenhum pedido recebido para processamento")
+                return
 
-                    self.api.send_order(order)
+            self.logger.info(f"Iniciando envio de {total} pedidos para fila")
 
-                    success_orders.append(order)
+            # envia todos os pedidos para a fila
+            self.producer.publish(orders)
 
-                except Exception as e:
-                    failed_orders.append(order)
-
-                    self.logger.error(
-                        f"Erro ao enviar pedido {order.id_pedido}: {str(e)}"
-                    )
-
-            if success_orders:
-                self.repo.save_all(success_orders)
-                self.logger.info(f"{len(success_orders)} pedidos salvos no banco")
-            else:
-                self.logger.warning("Nenhum pedido foi enviado com sucesso")
-
-            self.logger.info(
-                f"Processamento finalizado | Sucesso: {len(success_orders)} | Falhas: {len(failed_orders)}"
-            )
+            self.logger.info(f"{total} pedidos enviados para RabbitMQ com sucesso")
 
         except Exception as e:
-            self.logger.critical(f"Erro crítico no processamento: {str(e)}")
-
-        finally:
-            self.repo.close()
+            self.logger.critical(f"Erro crítico ao enviar pedidos para fila: {str(e)}")

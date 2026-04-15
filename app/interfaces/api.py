@@ -4,9 +4,9 @@ import os
 
 from app.infrastructure.csv.csv_reader import CsvReader
 from app.infrastructure.database.postgres_repository import PostgresRepository
-from app.infrastructure.api.rest_client import RestClient
 from app.infrastructure.database.init_db import init_db
 from app.infrastructure.logging.logger import get_logger
+from app.infrastructure.queue.producer import RabbitMQProducer
 
 from app.application.use_cases.process_orders import ProcessOrdersUseCase
 from app.application.use_cases.generate_report import GenerateReportUseCase
@@ -28,7 +28,7 @@ def root():
 @app.post(
     "/orders/import",
     summary="Importar pedidos via CSV",
-    description="Faz upload de um arquivo CSV, processa pedidos e envia para API externa",
+    description="Faz upload de um arquivo CSV e envia pedidos para processamento assíncrono",
 )
 async def import_orders(
     file: UploadFile = File(..., description="Arquivo CSV com pedidos")
@@ -36,29 +36,23 @@ async def import_orders(
     logger = get_logger()
 
     try:
-        
         os.makedirs("data", exist_ok=True)
 
         filename = os.path.basename(file.filename)
         file_path = os.path.join("data", filename)
 
-        
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        
         reader = CsvReader()
-        repo = PostgresRepository()
-        api = RestClient()
+        producer = RabbitMQProducer()
 
-        
         orders = reader.read(file_path)
 
-        
-        ProcessOrdersUseCase(repo, api, logger).execute(orders)
+        ProcessOrdersUseCase(producer, logger).execute(orders)
 
         return {
-            "message": "Pedidos processados com sucesso",
+            "message": "Pedidos enviados para processamento assíncrono",
             "processed": len(orders)
         }
 
@@ -85,7 +79,6 @@ def generate_report():
 
         repo = PostgresRepository()
 
-        
         data = GenerateReportUseCase(repo).execute()
 
         return {
