@@ -1,4 +1,4 @@
-#  Order Integration System
+# Order Integration System
 
 Sistema de integração de pedidos baseado em pipeline de dados (ETL), com envio para API externa, persistência em banco de dados e testes automatizados.
 
@@ -35,7 +35,7 @@ CSV → ETL → API → PostgreSQL
 
 ---
 
-# 📁 Estrutura do projeto
+# Estrutura do projeto
 
 app/
 ├── application/
@@ -49,38 +49,40 @@ app/
 │   └── queue/
 ├── interfaces/
 │   └── api.py
+├── ArquivoParaTeste/
+│   └── orders.csv
 tests/
 docker-compose.yml
 Dockerfile
 
 ---
 
-# ⚙️ Pré-requisitos
+# Pré-requisitos
 
 - Docker
 - Docker Compose
 
 ---
 
-# 🚀 Como executar o projeto
+# Como executar o projeto
 
 ## 1. Subir todos os serviços
 
 docker-compose down -v  
-docker-compose build --no-cache
-docker-compose up
+docker-compose build --no-cache  
+docker-compose up  
 
 ---
 
-## 1.1 Acessar Teste API
+## 1.1 Executar testes automatizados
 
-docker-compose up tests
+docker-compose up tests  
 
 ---
 
 ## 2. Acessar API
 
-http://localhost:8000/docs
+http://localhost:8000/docs  
 
 ---
 
@@ -98,94 +100,15 @@ Password: postgres
 
 ## Endpoint
 
-POST /orders/import
+POST /orders/import  
 
-## Exemplo de CSV
+## Arquivo de teste incluído
 
-id_pedido,cliente,valor,status
-1,Ana,100,pending
-2,Bia,200,approved
-3,Carlos,300,canceled
+Este projeto já contém uma pasta chamada:
 
----
+ArquivoParaTeste/
 
-# Relatório
+Ela contém um arquivo CSV pronto para execução do sistema:
 
-## Endpoint
-
-GET /orders/report
-
-Retorna:
-
-- Total por status
-- Valor total por status
-- CSV gerado
-
----
-
-# Testes automatizados
-
-docker-compose up tests
-
----
-
-# Serviços
-
-- db → PostgreSQL
-- app → FastAPI
-- tests → Pytest container
-
----
-
-# Decisões arquiteturais
-
-- Clean Architecture (camadas separadas)
-- ETL isolado da infraestrutura
-- Use Cases para regras de negócio
-- Repository Pattern para banco
-- Docker para consistência de ambiente
-- Testes automatizados
-
----
-
-Fluxo do sistema
-
-1. Upload de CSV via API  
-2. ETL (validação e transformação)  
-3. Envio para API externa  
-4. Persistência no PostgreSQL  
-5. Geração de relatório  
-
----
-
-Diferenciais
-
-✔ Pipeline ETL estruturado  
-✔ Arquitetura em camadas  
-✔ Integração com API externa  
-✔ Persistência em banco relacional  
-✔ Testes automatizados  
-✔ Docker Compose completo  
-✔ Código limpo e modular  
-
----
-
-Descrição para entrevista
-
-Desenvolvi um pipeline de integração de dados com arquitetura em camadas, utilizando ETL para padronização de pedidos, integração com API externa e persistência em PostgreSQL. Todo o ambiente é containerizado com Docker e validado com testes automatizados.
-
----
-
-Execução dos testes
-
-docker-compose up tests
-
----
-
-Resultado
-
-✔ Sistema funcional  
-✔ Arquitetura escalável  
-✔ Testável  
-✔ Containerizado  
-✔ Pronto para produção simulada
+```text
+ArquivoParaTeste/orders.csv
